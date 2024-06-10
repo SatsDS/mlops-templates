@@ -6,10 +6,7 @@ on:
       endpoint_file:
         required: true
         type: string
-      model_resource_group:
-        required: true
-        type: string
-      model_workspace_name:
+      registry_name:
         required: true
         type: string
       deployment_resource_group:
@@ -50,7 +47,7 @@ jobs:
         run: az extension update -n ml
       - name: get-model-version
         run: |
-          model_version=$(az ml model list --name ${{ inputs.model_name }} --resource-group ${{ inputs.model_resource_group }} --workspace-name ${{ inputs.model_workspace_name }} --query "[0].{Version:version}" --output tsv)
+          model_version=$(az ml model list --name ${{ inputs.model_name }} --registry-name ${{ inputs.registry_name }} --query "[0].{Version:version}" --output tsv)
           if [[ -z "$model_version" ]]
           then
             echo "Model version extraction failed"
