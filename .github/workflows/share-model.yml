@@ -50,4 +50,4 @@ jobs:
 
       - name: share-model-to-registry
         run: |
-          az ml model share --name ${{ inputs.model_name }} --version ${{ env.MODEL_VERSION }} --resource-group ${{ inputs.resource_group}} --workspace-name ${{ inputs.workspace_name }} --registry-name ${{ inputs.registry_name}} --share-with-name ${{ inputs.model_name }} --share-with-version ${{ env.model_version }}
+          az ml model share --name ${{ inputs.model_name }} --version ${{ env.MODEL_VERSION }} --resource-group ${{ inputs.resource_group}} --workspace-name ${{ inputs.workspace_name }} --registry-name ${{ inputs.registry_name}} --share-with-name ${{ inputs.model_name }} --share-with-version ${{ env.MODEL_VERSION }}
