@@ -59,9 +59,9 @@ jobs:
           echo "MODEL_VERSION=$model_version" >> $GITHUB_ENV
       - name: update-deployment-file
         run: |
-          python ${{ inputs.update_version_file }} ${{ env.MODEL_VERSION }}
+          python ${{ inputs.update_version_file }} ${{ env.MODEL_VERSION }} ${{ inputs.endpoint_file }} deployment.yml
       - name: create-batch-deployment
         run: |
           az ml ${{ inputs.endpoint_type }}-deployment create --name ${{ inputs.deployment_name }} --endpoint ${{ inputs.endpoint_name }} \
-          -f ${{ github.workspace }}/${{ inputs.endpoint_file }} --resource-group ${{ inputs.deployment_resource_group }} \
+          -f ${{ github.workspace }}/${{ env.UPDATED_DEPLOYMENT_YAML }} --resource-group ${{ inputs.deployment_resource_group }} \
           --workspace-name ${{ inputs.deployment_workspace_name }}
