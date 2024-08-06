@@ -27,6 +27,9 @@ on:
       model_name:
         required: true
         type: string
+      update_version_file:
+        required: true
+        type: string
     secrets:
       creds:
         required: true
