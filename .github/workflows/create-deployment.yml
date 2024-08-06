@@ -54,6 +54,9 @@ jobs:
             exit 1
           fi
           echo "MODEL_VERSION=$model_version" >> $GITHUB_ENV
+      - name: update-deployment-file
+        run: |
+          python ${{ inputs.update_version_file }} ${{ env.MODEL_VERSION }}
       - name: create-batch-deployment
         run: |
           az ml ${{ inputs.endpoint_type }}-deployment create --name ${{ inputs.deployment_name }} --endpoint ${{ inputs.endpoint_name }} \
