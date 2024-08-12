@@ -37,6 +37,9 @@ jobs:
 
       - name: update-extension
         run: az extension update -n ml
+
+      - name: install-modelscan
+        run: pip install modelscan
       
       - name: get-model-version
         run: |
@@ -47,6 +50,12 @@ jobs:
             exit 1
           fi
           echo "MODEL_VERSION=$model_version" >> $GITHUB_ENV
+
+      - name: scan-model
+        run: |
+          az ml model download --name ${{ inputs.model_name }} --resource-group ${{ inputs.resource_group }} --workspace-name ${{ inputs.workspace_name }} --version ${{ env.MODEL_VERSION }}
+          pickle_path=$(find ${{ inputs.model_name }}/${{ inputs.model_name }} -name "*.pkl")
+          modelscan -p $pickle_path
 
       - name: share-model-to-registry
         run: |
