@@ -1,4 +1,4 @@
-name: Share Model to Registry
+name: Scan Registered Model
 
 on:
   workflow_call:
@@ -19,7 +19,7 @@ on:
         creds:
           required: true
 jobs:
-  share-model:
+  scan-model:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,9 @@ jobs:
 
       - name: update-extension
         run: az extension update -n ml
+
+      - name: install-modelscan
+        run: pip install modelscan
       
       - name: get-model-version
         run: |
@@ -48,6 +51,8 @@ jobs:
           fi
           echo "MODEL_VERSION=$model_version" >> $GITHUB_ENV
 
-      - name: share-model-to-registry
+      - name: scan-model
         run: |
-          az ml model share --name ${{ inputs.model_name }} --version ${{ env.MODEL_VERSION }} --resource-group ${{ inputs.resource_group}} --workspace-name ${{ inputs.workspace_name }} --registry-name ${{ inputs.registry_name}} --share-with-name ${{ inputs.model_name }} --share-with-version ${{ env.MODEL_VERSION }}
+          az ml model download --name ${{ inputs.model_name }} --resource-group ${{ inputs.resource_group }} --workspace-name ${{ inputs.workspace_name }} --version ${{ env.MODEL_VERSION }}
+          pickle_path=$(find ${{ inputs.model_name }}/${{ inputs.model_name }} -name "*.pkl")
+          modelscan -p $pickle_path
